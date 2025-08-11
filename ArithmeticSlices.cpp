@@ -10,30 +10,17 @@ public:
         if (n < 3) return 0;
 
         int count = 0;
-        int l = 0, r = 1, d = nums[r++] - nums[l];
-        bool arithmetic = false;
-        while (r < n) {
-            if (nums[r] - nums[r - 1] == d) {
-                arithmetic = true;
-            }
-            else {
-                arithmetic = false;
-                int length = r - l - 2;
-                if (length > 0) {
-                    count += (length * (length + 1)) /2;
-                }
+        int curr = 0;
 
-                l = r - 1;
-                d = nums[r] - nums[l];
-            }
-            ++r;
-        }
-        if (arithmetic) {
-            int length = r - l - 2;
-            if (length > 0) {
-                count += (length * (length + 1)) /2;
+        for (int i = 2; i < n; ++i) {
+            if (nums[i] - nums[i - 1] == nums[i - 1] - nums[i - 2]) {
+                ++curr;
+                count += curr;
+            } else {
+                curr = 0;
             }
         }
+
         return count;
     }
 };
