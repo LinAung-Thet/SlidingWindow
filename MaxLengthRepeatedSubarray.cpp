@@ -7,23 +7,27 @@ using namespace std;
 class Solution {
 public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
-        int maxLen = 0;
-        int m = nums1.size(), n = nums2.size();
+        // Convert nums2 to a string
+        std::string strnum2;
+        for (int x : nums2) {
+            strnum2 += static_cast<char>(x);
+        }
 
-        // Slide nums1 over nums2
-        for (int offset = -n + 1; offset < m; ++offset) {
-            int len = 0;
-            for (int i = max(0, offset), j = max(0, -offset);
-                i < m && j < n; ++i, ++j) {
-                if (nums1[i] == nums2[j]) {
-                    ++len;
-                    maxLen = max(maxLen, len);
-                } else {
-                    len = 0;
-                }
+        std::string strmax;
+        int ans = 0;
+
+        for (int num : nums1) {
+            strmax += static_cast<char>(num);
+
+            // Check if strmax is a substring of strnum2
+            if (strnum2.find(strmax) != std::string::npos) {
+                ans = std::max(ans, static_cast<int>(strmax.size()));
+            } else {
+                strmax.erase(0, 1);  // Remove first character
             }
         }
-        return maxLen;
+
+        return ans;
     }
 };
 
