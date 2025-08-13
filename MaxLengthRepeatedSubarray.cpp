@@ -7,27 +7,20 @@ using namespace std;
 class Solution {
 public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
-        int n1 = nums1.size();
-        int n2 = nums2.size();
-        if (n1 < 1 || n2 < 1) 
-            return 0;
+        int m = nums1.size(), n = nums2.size();
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        int maxLen = 0;
 
-        int maxLength = 0, l1 = 0;
-        while (l1 < n1) {
-            int  l2 = 0;
-            while (l2 < n2 && l1 < n1) { 
-                int length = 0, buf1 = l1, buf2 = l2;
-                while (nums1[buf1] == nums2[buf2]) {
-                    ++buf1; ++buf2; ++length;
-                    if (buf1 >= n1 || buf2 >= n2)
-                        break;
+        for (int i = m - 1; i >= 0; --i) {
+            for (int j = n - 1; j >= 0; --j) {
+                if (nums1[i] == nums2[j]) {
+                    dp[i][j] = dp[i + 1][j + 1] + 1;
+                    maxLen = max(maxLen, dp[i][j]);
                 }
-                maxLength = max(maxLength, length);
-                ++l2;
             }
-            ++l1;
         }
-        return maxLength;
+
+        return maxLen;
     }
 };
 
