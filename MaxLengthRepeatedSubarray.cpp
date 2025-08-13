@@ -7,19 +7,22 @@ using namespace std;
 class Solution {
 public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
-        int m = nums1.size(), n = nums2.size();
-        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
         int maxLen = 0;
+        int m = nums1.size(), n = nums2.size();
 
-        for (int i = m - 1; i >= 0; --i) {
-            for (int j = n - 1; j >= 0; --j) {
+        // Slide nums1 over nums2
+        for (int offset = -n + 1; offset < m; ++offset) {
+            int len = 0;
+            for (int i = max(0, offset), j = max(0, -offset);
+                i < m && j < n; ++i, ++j) {
                 if (nums1[i] == nums2[j]) {
-                    dp[i][j] = dp[i + 1][j + 1] + 1;
-                    maxLen = max(maxLen, dp[i][j]);
+                    ++len;
+                    maxLen = max(maxLen, len);
+                } else {
+                    len = 0;
                 }
             }
         }
-
         return maxLen;
     }
 };
