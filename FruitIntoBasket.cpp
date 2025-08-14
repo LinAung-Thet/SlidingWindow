@@ -9,34 +9,27 @@ using namespace std;
 class Solution {
 public:
     int totalFruit(vector<int>& fruits) {
-        int n = fruits.size();
-        if (n < 3) return n;
+        int last = -1, secondLast = -1;
+        int lastCount = 0, curr = 0, maxFruit = 0;
 
-        int left = 0, right = 0;
-        int maxFruit = 0;
-        unordered_map<int , int> fruitCount;
-
-        while (right < n) {
-            // If the fruit is in the basket, increase its count
-            if(!fruitCount.insert({fruits[right], 1}).second) {
-                fruitCount[fruits[right]]++;
+        for (int fruit : fruits) {
+            if (fruit == last || fruit == secondLast) {
+                curr++;
+            } else {
+                curr = lastCount + 1;
             }
 
-            // If the types of fruits exceed 2, shrink the window from the left
-            while(fruitCount.size() > 2) {
-                fruitCount[fruits[left]]--;
-                if(fruitCount[fruits[left]] == 0) {
-                    fruitCount.erase(fruits[left]);
-                }
-                ++left;
+            if (fruit == last) {
+                lastCount++;
+            } else {
+                lastCount = 1;
+                secondLast = last;
+                last = fruit;
             }
 
-            // Update the maximum number of fruits in the basket
-            maxFruit = max(maxFruit, right - left + 1);
-
-            // Move the right pointer to expand the window
-            ++right;
+            maxFruit = max(maxFruit, curr);
         }
+
         return maxFruit;
     }
 };
