@@ -16,32 +16,23 @@ public:
         int n = arr.size();
         if (n < 2) return n;
 
-        int prev = compare(arr[0], arr[1]);
-        int maxLength = prev == 0 ? 1 : 2;
-        int left = 0, right = 2;
-        while (right < n) {
-            int curr = compare(arr[right - 1], arr[right]);
-            while (curr == 0) {
-                left = right++;
-                prev = curr;
-                if (right >= n)
-                    return maxLength;
-                curr = compare(arr[right - 1], arr[right]);
+        int inc = 1, dec = 1, maxLen = 1;
+
+        for (int i = 1; i < n; ++i) {
+            int comparison = compare(arr[i], arr[i - 1]);
+            if (comparison == 1) {
+                inc = dec + 1;
+                dec = 1;
+            } else if (comparison == -1) {
+                dec = inc + 1;
+                inc = 1;
+            } else {
+                inc = dec = 1;
             }
-            if (prev == 0) {
-                maxLength = max(maxLength, 2);
-            }
-            else {
-                if (prev == curr) {
-                    left = right - 1;
-                }
-                maxLength = max(maxLength, right - left + 1);
-            }
-            
-            ++right;
-            prev = curr;
+            maxLen = max(maxLen, max(inc, dec));
         }
-        return maxLength;
+
+        return maxLen;
     }
 };
 
