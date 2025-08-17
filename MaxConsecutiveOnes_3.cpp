@@ -7,27 +7,24 @@ using namespace std;
 class Solution {
 public:
     int longestOnes(vector<int>& nums, int k) {
-        int n = nums.size();
-        if (n <= k) return n;
+        int left = 0, maxLen = 0;
 
-        int left = 0, right = 0, maxLength = 0, flip = 0;
-        while (right < n) {
+        for (int right = 0; right < nums.size(); ++right) {
             if (nums[right] == 0) {
-                if(++flip > k) {
-                    // move left until it passes a zero
-                    while (left <= right && nums[left] == 1){
-                        ++left;
-                    }
-                    if(nums[left] == 0) {
-                        ++left;
-                        --flip;
-                    }
-                }
+                --k;
             }
-            maxLength = max(maxLength, right - left + 1);
-            ++right;
+
+            while (k < 0) {
+                if (nums[left] == 0) {
+                    ++k;
+                }
+                ++left;
+            }
+
+            maxLen = max(maxLen, right - left + 1);
         }
-        return maxLength;
+
+        return maxLen;
     }
 };
 
